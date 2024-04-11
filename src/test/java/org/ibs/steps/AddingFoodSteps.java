@@ -33,9 +33,20 @@ public class AddingFoodSteps {
     }
 
     @Step("Добавляем продукт: {название} с типом: {тип} и статусом: {статус}")
-    @Когда("пользователь добавляет продукт {string} с типом {string} и статусом {string}")
-    public void пользовательДобавляетПродуктСТипомИСтатусом(String название, String тип, String статус) {
-        boolean status = Boolean.parseBoolean(статус);
+    @Когда("пользователь добавляет продукт {string} с типом {string} и признаком {string}")
+    public void пользовательДобавляетПродуктСТипомИПризнаком(String название, String тип, String признак) {
+        boolean status;
+        switch (признак.toLowerCase()) {
+            case "экзотический":
+                status = true;
+                break;
+            case "неэкзотический":
+                status = false;
+                break;
+            default:
+                Assertions.assertTrue(false, "Не существует такого признака к продукту");
+                return;
+        }
         foodPage.addProducts(название, тип, status);
     }
 }
