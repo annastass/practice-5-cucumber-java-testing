@@ -16,8 +16,8 @@ public class AddingFoodSteps {
 
     @Step("Проверяем, что продукт {название} успешно добавлен")
     @Тогда("продукт {string} должен быть успешно добавлен")
-    public void продуктДолженБытьУспешноДобавлен(String название) {
-        Assertions.assertTrue(foodPage.containsProduct(название), "Не удалось добавить продукт: " + название);
+    public void продуктДолженБытьУспешноДобавлен(String name) {
+        Assertions.assertTrue(foodPage.containsProduct(name), "Не удалось добавить продукт: " + name);
     }
 
     @Step("Очищаем данные")
@@ -34,9 +34,9 @@ public class AddingFoodSteps {
 
     @Step("Добавляем продукт: {название} с типом: {тип} и статусом: {статус}")
     @Когда("пользователь добавляет продукт {string} с типом {string} и признаком {string}")
-    public void пользовательДобавляетПродуктСТипомИПризнаком(String название, String тип, String признак) {
+    public void пользовательДобавляетПродуктСТипомИПризнаком(String name, String type, String exotic) {
         boolean status;
-        switch (признак.toLowerCase()) {
+        switch (exotic.toLowerCase()) {
             case "экзотический":
                 status = true;
                 break;
@@ -47,6 +47,6 @@ public class AddingFoodSteps {
                 Assertions.assertTrue(false, "Не существует такого признака к продукту");
                 return;
         }
-        foodPage.addProducts(название, тип, status);
+        foodPage.addProducts(name, type, status);
     }
 }
