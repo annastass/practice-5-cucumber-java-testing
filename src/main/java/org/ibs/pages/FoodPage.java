@@ -4,6 +4,7 @@ import org.ibs.utils.PropConst;
 import org.ibs.managers.DriverManager;
 import org.ibs.managers.TestPropManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -15,12 +16,13 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class FoodPage {
 
     protected final DriverManager driverManager = DriverManager.getDriverManager();
     protected WebDriver webDriver = driverManager.getDriver();
-    private final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+    private final WebDriverWait wait = new WebDriverWait(webDriver, 5);
     private final TestPropManager props = TestPropManager.getTestPropManager();
 
     private static FoodPage foodPage;
@@ -97,20 +99,28 @@ public class FoodPage {
     }
 
     public boolean containsProduct(String name) {
-        List<WebElement> rows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsLocator));
-        for (WebElement row : rows) {
-            WebElement productCells = row.findElement(By.xpath(".//td"));
-            String productText = productCells.getText();
-            if (productText.equals(name)) {
-                return true;
+        try {
+            List<WebElement> rows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsLocator));
+            for (WebElement row : rows) {
+                WebElement productCells = row.findElement(By.xpath(".//td"));
+                String productText = productCells.getText();
+                if (productText.equals(name)) {
+                    return true;
+                }
             }
+        } catch (StaleElementReferenceException e) {
+            return containsProduct(name);
+        } catch (NoSuchElementException e) {
+            System.out.println("Элемент не найден: " + e.getMessage());
         }
         return false;
     }
 
+
     public boolean checkTable() {
-        List<WebElement> currentRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsLocator));
-        Map<String, String> currentTable = saveTable(currentRows);
+        try {
+            List<WebElement> currentRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsLocator));
+            Map<String, String> currentTable = saveTable(currentRows);
             /*if (dataTable.size() != currentTable.size()) {
                 return false;
             }
@@ -121,6 +131,10 @@ public class FoodPage {
                     return false;
                 }
             }*/
-        return  currentTable.size() == 4;//true;
+            return currentTable.size() == 4;
+        } catch (StaleElementReferenceException e) {
+            return checkTable();
+        }
     }
+
 }

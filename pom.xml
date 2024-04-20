@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.19.1</version>
+            <version>3.141.59</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
@@ -84,8 +84,10 @@
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/1.9.21/aspectjweaver-1.9.21.jar"
                     </argLine>
                     <systemPropertyVariables>
-                        <allure.results.directory>${project.build.directory}/reports/allure-results</allure.results.directory>
-                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                        <allure.results.directory>${project.build.directory}/reports/allure-results
+                        </allure.results.directory>
+                        <junit.jupiter.extensions.autodetection.enabled>true
+                        </junit.jupiter.extensions.autodetection.enabled>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -102,7 +104,6 @@
                 </configuration>
 
             </plugin>
-
 
         </plugins>
     </build>
